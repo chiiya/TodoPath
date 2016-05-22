@@ -9,39 +9,31 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingTop="70dp"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="me.ewitte.todopath.TodoList"
+    tools:context="me.ewitte.todopath.TodoActivity"
     tools:showIn="@layout/activity_todo_list"
     android:paddingStart="20dp"
     android:paddingEnd="20dp">
 
     <TextView
+        android:id="@+id/tdv_list_title"
         android:fontFamily="sans-serif"
         android:textStyle="bold"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Einkaufsliste 1"
+        android:text="@string/placeholder"
         android:textSize="25sp"
         android:textAllCaps="true"
         android:textColor="@color/cyan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:fontFamily="sans-serif-medium"
-        android:textStyle="bold|italic"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="HIGH PRIORITY"
-        android:paddingTop="10sp"
-        android:textAllCaps="true"
+    <ListView
+        android:id="@+id/tdv_list"
+        tools:listitem="@layout/item_todo"
+        android:paddingTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ListView
-        tools:listitem="@layout/item_todo"
-        android:paddingTop="10dp"
-        android:id="@+id/list-todo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
 </LinearLayout>

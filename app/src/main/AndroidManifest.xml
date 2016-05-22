@@ -19,8 +19,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".TodoList"
-            android:label="@string/title_activity_todo_list"
+            android:name=".TodoActivity"
+            android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
