@@ -15,30 +15,30 @@ public class Todo {
     public static final String KEY_LIST_ID = "list_id";
     public static final String KEY_PRIORITY = "priority";
 
-    private int id;
+    private long id;
     private String name;
     private String created_at;
     private int status;
-    private int list_id;
+    private long list_id;
     private int priority;
 
     public Todo() {
     }
 
-    public Todo(String name, int list_id, int priority) {
+    public Todo(String name, long list_id, int priority) {
         this.name = name;
         this.list_id = list_id;
         this.priority = priority;
     }
 
-    public Todo(String name, int status, int list_id, int priority) {
+    public Todo(String name, int status, long list_id, int priority) {
         this.name = name;
         this.status = status;
         this.list_id = list_id;
         this.priority = priority;
     }
 
-    public Todo(int id, String name, String created_at, int status, int list_id, int priority) {
+    public Todo(long id, String name, String created_at, int status, long list_id, int priority) {
         this.id = id;
         this.name = name;
         this.created_at = created_at;
@@ -48,11 +48,11 @@ public class Todo {
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -80,11 +80,11 @@ public class Todo {
         this.status = status;
     }
 
-    public int getList_id() {
+    public long getList_id() {
         return list_id;
     }
 
-    public void setList_id(int list_id) {
+    public void setList_id(long list_id) {
         this.list_id = list_id;
     }
 

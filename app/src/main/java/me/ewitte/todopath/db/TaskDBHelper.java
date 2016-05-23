@@ -9,6 +9,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Build;
 import android.util.Log;
 
 import java.text.SimpleDateFormat;
@@ -47,7 +48,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                         Todo.KEY_CREATED_AT + " DATETIME," +
                         Todo.KEY_LIST_ID + " INTEGER," +
                         Todo.KEY_PRIORITY + " INTEGER," +
-                        "FOREIGN KEY(" + Todo.KEY_LIST_ID + ") REFERENCES " + List.TABLE + "(" + List.KEY_ID + ")" +
+                        "FOREIGN KEY(" + Todo.KEY_LIST_ID + ") REFERENCES " + List.TABLE + "(" + List.KEY_ID + ") ON DELETE CASCADE" +
                         " );"
         );
     }
@@ -59,6 +60,15 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         db.execSQL("DROP TABLE IF EXISTS " + List.TABLE);
         db.execSQL("DROP TABLE IF EXISTS " + Todo.TABLE);
         onCreate(db);
+    }
+
+    @Override
+    public void onConfigure(SQLiteDatabase db) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+            db.setForeignKeyConstraintsEnabled(true);
+        } else {
+            db.execSQL("PRAGMA foreign_keys=ON");
+        }
     }
 
     /**
@@ -73,7 +83,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(List.KEY_TITLE, list.getTitle());
         values.put(List.KEY_CREATED_AT, getDateTime());
 
-        return db.insert(List.TABLE, null, values);
+        long id = db.insert(List.TABLE, null, values);
+        db.close();
+        return id;
     }
 
 
@@ -98,6 +110,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                 c.getString(c.getColumnIndex(List.KEY_CREATED_AT)));
 
         c.close();
+        db.close();
         return list;
     }
 
@@ -125,6 +138,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         }
 
         c.close();
+        db.close();
         return lists;
     }
 
@@ -139,7 +153,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         ContentValues values = new ContentValues();
         values.put(List.KEY_TITLE, list.getTitle());
 
-        return db.update(List.TABLE, values, List.KEY_ID + " = ?", new String[] { String.valueOf(list.getId()) });
+        int rows = db.update(List.TABLE, values, List.KEY_ID + " = ?", new String[] { String.valueOf(list.getId()) });
+        db.close();
+        return rows;
     }
 
 
@@ -151,6 +167,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(List.TABLE, List.KEY_ID + " = ?", new String[] { String.valueOf(list.getId()) });
+        db.close();
     }
 
 
@@ -169,7 +186,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_CREATED_AT, getDateTime());
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
 
-        return db.insert(Todo.TABLE, null, values);
+        long id = db.insert(Todo.TABLE, null, values);
+        db.close();
+        return id;
     }
 
 
@@ -194,6 +213,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                 c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)));
 
         c.close();
+        db.close();
         return todo;
     }
 
@@ -202,7 +222,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
      * Retrieves all Todos associated with a given list from the database
      * @return ArrayList of all Todos
      */
-    public ArrayList<Todo> getAllTodosFromList(int list_id) {
+    public ArrayList<Todo> getAllTodosFromList(long list_id) {
         ArrayList<Todo> todos = new ArrayList<Todo>();
         String selectQuery = "SELECT * FROM " + Todo.TABLE + " WHERE " + Todo.KEY_LIST_ID + " = " + list_id;
         Log.e(LOG, selectQuery);
@@ -221,6 +241,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         }
 
         c.close();
+        db.close();
         return todos;
     }
 
@@ -238,7 +259,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_STATUS, todo.getStatus());
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
 
-        return db.update(Todo.TABLE, values, Todo.KEY_ID + " = ?", new String[] { String.valueOf(todo.getId()) });
+        int rows = db.update(Todo.TABLE, values, Todo.KEY_ID + " = ?", new String[] { String.valueOf(todo.getId()) });
+        db.close();
+        return rows;
     }
 
     /**
@@ -249,6 +272,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         db.delete(Todo.TABLE, Todo.KEY_ID + " = ?", new String[] { String.valueOf(todo.getId()) });
+        db.close();
     }
 
 

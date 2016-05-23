@@ -12,7 +12,7 @@ public class List {
     public static final String KEY_TITLE = "title";
     public static final String KEY_CREATED_AT = "created_at";
 
-    private int id;
+    private long id;
     private String title;
     private String created_at;
 
@@ -28,18 +28,18 @@ public class List {
         this.created_at = created_at;
     }
 
-    public List(int id, String title, String created_at) {
+    public List(long id, String title, String created_at) {
         this.id = id;
         this.title = title;
         this.created_at = created_at;
     }
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

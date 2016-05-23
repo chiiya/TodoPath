@@ -38,7 +38,7 @@ public class TodoActivity extends AppCompatActivity {
     private TodosAdapter todosAdapter;
     private ArrayList<Todo> todos;
     private Spinner spinner;
-    private int listID;
+    private long listID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +52,7 @@ public class TodoActivity extends AppCompatActivity {
         // Get the extra data from intent call
         Intent intent = getIntent();
         String listTitle = intent.getStringExtra(EXTRA_LIST_TITLE);
-        listID = intent.getIntExtra(EXTRA_LIST_ID, 0);
+        listID = intent.getLongExtra(EXTRA_LIST_ID, 0);
 
         // Set title of TextView to the list currently active
         TextView tdv_title = (TextView) findViewById(R.id.tdv_list_title);
@@ -129,8 +129,7 @@ public class TodoActivity extends AppCompatActivity {
                         String name = String.valueOf(todoEditText.getText());
                         int priority = spinner.getSelectedItemPosition();
                         Todo todo = new Todo(name, listID, priority);
-                        db.createTodo(todo);
-                        db.closeDB();
+                        todo.setId(db.createTodo(todo));
                         todos.add(todo);
                     }
                 })
@@ -181,7 +180,6 @@ public class TodoActivity extends AppCompatActivity {
                                 itemSelected.setName(name);
                                 itemSelected.setPriority(priority);
                                 db.updateTodo(itemSelected);
-                                db.closeDB();
                                 updateUI();
                             }
                         })
@@ -192,7 +190,6 @@ public class TodoActivity extends AppCompatActivity {
                 return true;
             case R.id.delete:
                 db.deleteTodo(itemSelected);
-                db.closeDB();
                 todos.remove(itemSelected);
                 updateUI();
                 return true;

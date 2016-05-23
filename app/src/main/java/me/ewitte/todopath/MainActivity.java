@@ -105,8 +105,7 @@ public class MainActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         String title = String.valueOf(listEditText.getText());
                         List list = new List(title);
-                        db.createList(list);
-                        db.closeDB();
+                        list.setId(db.createList(list));
                         lists.add(list);
                         emptyMessage.setVisibility(View.GONE);
                     }
@@ -144,7 +143,6 @@ public class MainActivity extends AppCompatActivity {
                                 String title = String.valueOf(listEditText.getText());
                                 itemSelected.setTitle(title);
                                 db.updateList(itemSelected);
-                                db.closeDB();
                                 updateUI();
                             }
                         })
@@ -155,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             case R.id.delete:
                 db.deleteList(itemSelected);
-                db.closeDB();
                 lists.remove(itemSelected);
                 updateUI();
                 return true;
