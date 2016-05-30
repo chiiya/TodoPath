@@ -23,6 +23,7 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -98,9 +99,9 @@ public class MainActivity extends AppCompatActivity {
     public void clickButtonNewList(View view) {
         final EditText listEditText = new EditText(this);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Add a new list")
+                .setTitle(R.id.command)
                 .setView(listEditText)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.id.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String title = String.valueOf(listEditText.getText());
@@ -110,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         emptyMessage.setVisibility(View.GONE);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.id.cancel, null)
                 .create();
         dialog.show();
         updateUI();
@@ -135,9 +136,9 @@ public class MainActivity extends AppCompatActivity {
                 final EditText listEditText = new EditText(this);
                 listEditText.setText(itemSelected.getTitle());
                 AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle("Edit list")
+                        .setTitle(R.id.edit)
                         .setView(listEditText)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.id.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String title = String.valueOf(listEditText.getText());
@@ -146,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                 updateUI();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.id.cancel, null)
                         .create();
                 dialog.show();
                 updateUI();

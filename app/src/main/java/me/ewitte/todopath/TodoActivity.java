@@ -121,9 +121,9 @@ public class TodoActivity extends AppCompatActivity {
         spinner.setSelection(1);
 
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle("Add a new Todo")
+                .setTitle(R.id.command)
                 .setView(dialogView)
-                .setPositiveButton("Add", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.id.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String name = String.valueOf(todoEditText.getText());
@@ -133,7 +133,7 @@ public class TodoActivity extends AppCompatActivity {
                         todos.add(todo);
                     }
                 })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton(R.id.cancel, null)
                 .create();
         dialog.show();
         updateUI();
@@ -170,9 +170,9 @@ public class TodoActivity extends AppCompatActivity {
                 spinner.setSelection(itemSelected.getPriority());
 
                 AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle("Edit Todo")
+                        .setTitle(R.id.edittodo)
                         .setView(dialogView)
-                        .setPositiveButton("Save", new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.id.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String name = String.valueOf(todoEditText.getText());
@@ -183,7 +183,7 @@ public class TodoActivity extends AppCompatActivity {
                                 updateUI();
                             }
                         })
-                        .setNegativeButton("Cancel", null)
+                        .setNegativeButton(R.id.cancel, null)
                         .create();
                 dialog.show();
                 updateUI();
