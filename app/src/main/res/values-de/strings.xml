@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="action_settings">Einstellungen</string>
+    <string name="menu_edit">Bearbeiten</string>
+    <string name="menu_delete">Löschen</string>
+    <string name="lists">Todo-Listen</string>
+    <string name="high_priority">Hohe Priorität</string>
+    <string name="medium_priority">Normale Priorität</string>
+    <string name="low_priority">Niedrige Priorität</string>
+    <string name="command">Neue Liste erstellen</string>
+    <string name="add">Hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="edit">Liste bearbeiten</string>
+    <string name="save">Speichern</string>
+    <string name="edittodo">Todo bearbeiten</string>
+    <string name="noLists">Noch keine Todo-Listen erstellt.</string>
+</resources>

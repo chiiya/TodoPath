@@ -23,18 +23,23 @@ import android.widget.Toast;
 import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 import me.ewitte.todopath.db.TaskDBHelper;
 import me.ewitte.todopath.model.List;
 import me.ewitte.todopath.model.Todo;
+import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class TodoActivity extends AppCompatActivity {
 
     public static final String EXTRA_LIST_TITLE = "me.ewitte.todopath.LISTTITLE";
     public static final String EXTRA_LIST_ID = "me.ewitte.todopath.LISTID";
+    static final int EDIT_TODO = 0;
+    static final int CREATE_TODO = 1;
 
     private TaskDBHelper db;
-    private ListView tdvListView;
+    private StickyListHeadersListView tdvListView;
     private TodosAdapter todosAdapter;
     private ArrayList<Todo> todos;
     private Spinner spinner;
@@ -60,7 +65,7 @@ public class TodoActivity extends AppCompatActivity {
 
         todos = db.getAllTodosFromList(listID);
 
-        tdvListView = (ListView) findViewById(R.id.tdv_list);
+        tdvListView = (StickyListHeadersListView) findViewById(R.id.tdv_list);
         registerForContextMenu(tdvListView);
         tdvListView.setVerticalScrollBarEnabled(false);
         tdvListView.setDivider(null);
@@ -70,7 +75,7 @@ public class TodoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
-                Todo todo = todosAdapter.getItem(position);
+                Todo todo = (Todo) todosAdapter.getItem(position);
                 if (todo.getStatus() == 0) {
                     todo.setStatus(1);
                 } else {
@@ -106,43 +111,14 @@ public class TodoActivity extends AppCompatActivity {
     }
 
     public void clickButtonNewTodo(View view) {
-
-        // Get the custom dialog view
-        LayoutInflater inflater = getLayoutInflater();
-        View dialogView = inflater.inflate(R.layout.todo_dialog, null);
-        final EditText todoEditText = (EditText)dialogView.findViewById(R.id.edit_todo);
-        spinner = (Spinner)dialogView.findViewById(R.id.priority_spinner);
-
-        // Populate Spinner with Options via Adapter
-        String[] options = {"High Priority", "Medium Priority", "Low Priority"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(TodoActivity.this, android.R.layout.simple_spinner_item, options);
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setAdapter(adapter);
-        spinner.setSelection(1);
-
-        AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.id.command)
-                .setView(dialogView)
-                .setPositiveButton(R.id.add, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String name = String.valueOf(todoEditText.getText());
-                        int priority = spinner.getSelectedItemPosition();
-                        Todo todo = new Todo(name, listID, priority);
-                        todo.setId(db.createTodo(todo));
-                        todos.add(todo);
-                    }
-                })
-                .setNegativeButton(R.id.cancel, null)
-                .create();
-        dialog.show();
-        updateUI();
+        Intent intent = new Intent(TodoActivity.this, EditTodoActivity.class);
+        startActivityForResult(intent, CREATE_TODO);
     }
 
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
-        if (v.getId()==R.id.tdv_list) {
+        if (((View)v.getParent()).getId()==R.id.tdv_list) {
             MenuInflater inflater = getMenuInflater();
             inflater.inflate(R.menu.menu_list, menu);
         }
@@ -152,41 +128,15 @@ public class TodoActivity extends AppCompatActivity {
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         final int position = info.position;
-        final Todo itemSelected = todosAdapter.getItem(info.position);
+        final Todo itemSelected = (Todo) todosAdapter.getItem(position);
         switch(item.getItemId()) {
             case R.id.edit:
-                // Get the custom dialog view
-                LayoutInflater inflater = getLayoutInflater();
-                View dialogView = inflater.inflate(R.layout.todo_dialog, null);
-                final EditText todoEditText = (EditText)dialogView.findViewById(R.id.edit_todo);
-                todoEditText.setText(itemSelected.getName());
-                spinner = (Spinner)dialogView.findViewById(R.id.priority_spinner);
-
-                // Populate Spinner with Options via Adapter
-                String[] options = {"High Priority", "Medium Priority", "Low Priority"};
-                ArrayAdapter<String> adapter = new ArrayAdapter<String>(TodoActivity.this, android.R.layout.simple_spinner_item, options);
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-                spinner.setAdapter(adapter);
-                spinner.setSelection(itemSelected.getPriority());
-
-                AlertDialog dialog = new AlertDialog.Builder(this)
-                        .setTitle(R.id.edittodo)
-                        .setView(dialogView)
-                        .setPositiveButton(R.id.save, new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String name = String.valueOf(todoEditText.getText());
-                                int priority = spinner.getSelectedItemPosition();
-                                itemSelected.setName(name);
-                                itemSelected.setPriority(priority);
-                                db.updateTodo(itemSelected);
-                                updateUI();
-                            }
-                        })
-                        .setNegativeButton(R.id.cancel, null)
-                        .create();
-                dialog.show();
-                updateUI();
+                Intent intent = new Intent(TodoActivity.this, EditTodoActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(Todo.TAG, itemSelected);
+                bundle.putInt(EditTodoActivity.EXTRA_TODO_ID, position);
+                intent.putExtras(bundle);
+                startActivityForResult(intent, EDIT_TODO);
                 return true;
             case R.id.delete:
                 db.deleteTodo(itemSelected);
@@ -200,14 +150,47 @@ public class TodoActivity extends AppCompatActivity {
 
     private void updateUI() {
         if (todosAdapter == null) {
-            todosAdapter = new TodosAdapter(this,
-                    R.layout.item_todo,
-                    todos);
+            todosAdapter = new TodosAdapter(this, todos);
             tdvListView.setAdapter(todosAdapter);
         } else {
+            Collections.sort(todos, new Comparator<Todo>() {
+                @Override
+                public int compare(Todo t1, Todo t2) {
+                    return t1.getPriority() - t2.getPriority();
+                }
+            });
             todosAdapter.notifyDataSetChanged();
         }
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == EDIT_TODO) {
+            Bundle extras = data.getExtras();
+
+            if (extras != null) {
+                Todo todo = extras.getParcelable(Todo.TAG);
+                int todoID = extras.getInt(EditTodoActivity.EXTRA_TODO_ID);
+                todos.set(todoID, todo);
+                db.updateTodo(todo);
+                updateUI();
+            }
+        } else if (requestCode == CREATE_TODO) {
+            Bundle extras = data.getExtras();
+
+            if (extras != null) {
+                Todo todo = extras.getParcelable(Todo.TAG);
+                todo.setList_id(listID);
+                todo.setId(db.createTodo(todo));
+                todos.add(todo);
+                updateUI();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        updateUI();
+    }
 }

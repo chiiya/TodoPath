@@ -14,8 +14,15 @@
     <string name="cancel">Cancel</string>
     <string name="edit">Edit List</string>
     <string name="save">Save</string>
-    <string name="edittodo">Edit Todo</string>
-    
+
+    <!-- EditTodoActivity -->
+    <string name="saveTodo">Save Todo</string>
+    <string name="createTodo">Create new Todo</string>
+    <string name="editTodo">Edit Todo</string>
+
+
+    <string name="noLists">You don\'t have any lists created so far.</string>
+
     <string-array name="priority_array">
         <item>High Priority</item>
         <item>Medium Priority</item>

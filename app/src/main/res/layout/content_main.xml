@@ -31,7 +31,7 @@
         android:fontFamily="sans-serif-light"
         android:paddingTop="10dp"
         android:visibility="gone"
-        android:text="You don't have any lists created so far." />
+        android:text="@string/noLists" />
 
     <ListView
         tools:listitem="@layout/item_list"
