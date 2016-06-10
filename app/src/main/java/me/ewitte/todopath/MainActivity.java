@@ -23,7 +23,6 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 import java.util.ArrayList;
 
@@ -97,11 +96,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void clickButtonNewList(View view) {
+
         final EditText listEditText = new EditText(this);
         AlertDialog dialog = new AlertDialog.Builder(this)
-                .setTitle(R.id.command)
+                .setTitle(R.string.command)
                 .setView(listEditText)
-                .setPositiveButton(R.id.add, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.add, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         String title = String.valueOf(listEditText.getText());
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
                         emptyMessage.setVisibility(View.GONE);
                     }
                 })
-                .setNegativeButton(R.id.cancel, null)
+                .setNegativeButton(R.string.cancel, null)
                 .create();
         dialog.show();
         updateUI();
@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
                 AlertDialog dialog = new AlertDialog.Builder(this)
                         .setTitle(R.id.edit)
                         .setView(listEditText)
-                        .setPositiveButton(R.id.save, new DialogInterface.OnClickListener() {
+                        .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 String title = String.valueOf(listEditText.getText());
@@ -147,7 +147,7 @@ public class MainActivity extends AppCompatActivity {
                                 updateUI();
                             }
                         })
-                        .setNegativeButton(R.id.cancel, null)
+                        .setNegativeButton(R.string.cancel, null)
                         .create();
                 dialog.show();
                 updateUI();

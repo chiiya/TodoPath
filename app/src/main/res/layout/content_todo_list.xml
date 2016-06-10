@@ -28,9 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <ListView
+    <se.emilsjolander.stickylistheaders.StickyListHeadersListView
         android:id="@+id/tdv_list"
-        tools:listitem="@layout/item_todo"
         android:paddingTop="10dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />

@@ -1,11 +1,14 @@
 package me.ewitte.todopath.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by Allaire on 21.05.2016.
  */
-public class Todo {
+public class Todo implements Parcelable{
 
-    public static final String TAG = List.class.getSimpleName();
+    public static final String TAG = Todo.class.getSimpleName();
     public static final String TABLE = "todos";
     // Labels Table Columns names
     public static final String KEY_ID = "id";
@@ -14,6 +17,10 @@ public class Todo {
     public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_LIST_ID = "list_id";
     public static final String KEY_PRIORITY = "priority";
+
+    public static final int PRIORITY_HIGH = 0;
+    public static final int PRIORITY_MEDIUM = 1;
+    public static final int PRIORITY_LOW = 2;
 
     private long id;
     private String name;
@@ -96,4 +103,42 @@ public class Todo {
         this.priority = priority;
     }
 
+    protected Todo(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        created_at = in.readString();
+        status = in.readInt();
+        list_id = in.readLong();
+        priority = in.readInt();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(created_at);
+        dest.writeInt(status);
+        dest.writeLong(list_id);
+        dest.writeInt(priority);
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Todo> CREATOR = new Parcelable.Creator<Todo>() {
+        @Override
+        public Todo createFromParcel(Parcel in) {
+            return new Todo(in);
+        }
+
+        @Override
+        public Todo[] newArray(int size) {
+            return new Todo[size];
+        }
+    };
 }
+
+

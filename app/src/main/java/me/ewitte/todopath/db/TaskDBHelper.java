@@ -224,7 +224,8 @@ public class TaskDBHelper extends SQLiteOpenHelper{
      */
     public ArrayList<Todo> getAllTodosFromList(long list_id) {
         ArrayList<Todo> todos = new ArrayList<Todo>();
-        String selectQuery = "SELECT * FROM " + Todo.TABLE + " WHERE " + Todo.KEY_LIST_ID + " = " + list_id;
+        String selectQuery = "SELECT * FROM " + Todo.TABLE + " WHERE " + Todo.KEY_LIST_ID + " = " + list_id
+                + " ORDER BY " + Todo.KEY_PRIORITY + " ASC";
         Log.e(LOG, selectQuery);
 
         SQLiteDatabase db = this.getWritableDatabase();
