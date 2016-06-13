@@ -19,6 +19,7 @@
     <string name="saveTodo">Save Todo</string>
     <string name="createTodo">Create new Todo</string>
     <string name="editTodo">Edit Todo</string>
+    <string name="addContact">Add Contact</string>
 
 
     <string name="noLists">You don\'t have any lists created so far.</string>

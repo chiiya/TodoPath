@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import java.util.ArrayList;
@@ -70,6 +71,13 @@ public class TodosAdapter extends BaseAdapter implements StickyListHeadersAdapte
             holder.todoTextView.setPaintFlags(holder.todoTextView.getPaintFlags() & (~ Paint.STRIKE_THRU_TEXT_FLAG));
         }
 
+        // Show Contact ImageButton if a contact is assigned to the Todo
+        if (todo.getContactUri() != null && !todo.getContactUri().isEmpty()) {
+            holder.todoContactImage.setVisibility(View.VISIBLE);
+            holder.todoContactName.setText(todo.getContactName());
+            holder.todoContactName.setVisibility(View.VISIBLE);
+        }
+
         // Return the completed view to render on screen
         return convertView;
     }
@@ -120,9 +128,13 @@ public class TodosAdapter extends BaseAdapter implements StickyListHeadersAdapte
 
     private class ViewHolder {
         private TextView todoTextView;
+        private ImageButton todoContactImage;
+        private TextView todoContactName;
 
         public ViewHolder(View v) {
             todoTextView = (TextView) v.findViewById(R.id.task_title);
+            todoContactImage = (ImageButton) v.findViewById(R.id.buttonContact);
+            todoContactName = (TextView) v.findViewById(R.id.tvListContactName);
         }
     }
 

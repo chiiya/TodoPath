@@ -3,7 +3,8 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="center_vertical">
+    android:layout_gravity="center_vertical"
+    android:descendantFocusability="blocksDescendants">
 
     <TextView
         android:id="@+id/task_title"
@@ -13,7 +14,46 @@
         android:fontFamily="sans-serif-light"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:paddingTop="10dp"
-        android:paddingBottom="10dp"/>
+        android:layout_marginBottom="10dp"/>
+
+    <LinearLayout
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/buttonContact"
+            android:background="@null"
+            android:visibility="gone"
+            android:tint="@color/dark_gray"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/account"
+            android:focusable="false"
+            android:focusableInTouchMode="false"/>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_vertical"
+            android:gravity="right"
+            android:descendantFocusability="blocksDescendants">
+
+            <TextView
+                android:id="@+id/tvListContactName"
+                android:textColor="@color/dark_gray"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:visibility="gone"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:layout_marginLeft="10dp" />
+
+        </LinearLayout>
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
