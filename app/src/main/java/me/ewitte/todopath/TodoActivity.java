@@ -165,25 +165,31 @@ public class TodoActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == EDIT_TODO) {
-            Bundle extras = data.getExtras();
+        if (resultCode == RESULT_OK) {
+            switch(requestCode) {
+                case EDIT_TODO:
+                    Bundle extras = data.getExtras();
 
-            if (extras != null) {
-                Todo todo = extras.getParcelable(Todo.TAG);
-                int todoID = extras.getInt(EditTodoActivity.EXTRA_TODO_ID);
-                todos.set(todoID, todo);
-                db.updateTodo(todo);
-                updateUI();
-            }
-        } else if (requestCode == CREATE_TODO) {
-            Bundle extras = data.getExtras();
+                    if (extras != null) {
+                        Todo todo = extras.getParcelable(Todo.TAG);
+                        int todoID = extras.getInt(EditTodoActivity.EXTRA_TODO_ID);
+                        todos.set(todoID, todo);
+                        db.updateTodo(todo);
+                        updateUI();
+                    }
+                    break;
 
-            if (extras != null) {
-                Todo todo = extras.getParcelable(Todo.TAG);
-                todo.setList_id(listID);
-                todo.setId(db.createTodo(todo));
-                todos.add(todo);
-                updateUI();
+                case CREATE_TODO:
+                    Bundle extras2 = data.getExtras();
+
+                    if (extras2 != null) {
+                        Todo todo = extras2.getParcelable(Todo.TAG);
+                        todo.setList_id(listID);
+                        todo.setId(db.createTodo(todo));
+                        todos.add(todo);
+                        updateUI();
+                    }
+                    break;
             }
         }
     }

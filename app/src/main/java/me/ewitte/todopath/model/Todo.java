@@ -1,5 +1,6 @@
 package me.ewitte.todopath.model;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -17,6 +18,8 @@ public class Todo implements Parcelable{
     public static final String KEY_CREATED_AT = "created_at";
     public static final String KEY_LIST_ID = "list_id";
     public static final String KEY_PRIORITY = "priority";
+    public static final String KEY_CONTACT_URI = "contact_uri";
+    public static final String KEY_CONTACT_NAME = "contact_name";
 
     public static final int PRIORITY_HIGH = 0;
     public static final int PRIORITY_MEDIUM = 1;
@@ -28,6 +31,8 @@ public class Todo implements Parcelable{
     private int status;
     private long list_id;
     private int priority;
+    private String contactUri;
+    private String contactName;
 
     public Todo() {
     }
@@ -45,13 +50,16 @@ public class Todo implements Parcelable{
         this.priority = priority;
     }
 
-    public Todo(long id, String name, String created_at, int status, long list_id, int priority) {
+    public Todo(long id, String name, String created_at, int status, long list_id, int priority, String contactUri, String
+                contactName) {
         this.id = id;
         this.name = name;
         this.created_at = created_at;
         this.status = status;
         this.list_id = list_id;
         this.priority = priority;
+        this.contactUri = contactUri;
+        this.contactName = contactName;
     }
 
 
@@ -103,6 +111,18 @@ public class Todo implements Parcelable{
         this.priority = priority;
     }
 
+    public String getContactUri() {
+        return contactUri;
+    }
+
+    public void setContactUri(String contactUri) {
+        this.contactUri = contactUri;
+    }
+
+    public String getContactName() { return contactName; }
+
+    public void setContactName(String contactName) { this.contactName = contactName; }
+
     protected Todo(Parcel in) {
         id = in.readLong();
         name = in.readString();
@@ -110,6 +130,8 @@ public class Todo implements Parcelable{
         status = in.readInt();
         list_id = in.readLong();
         priority = in.readInt();
+        contactUri = in.readString();
+        contactName = in.readString();
     }
 
     @Override
@@ -125,6 +147,8 @@ public class Todo implements Parcelable{
         dest.writeInt(status);
         dest.writeLong(list_id);
         dest.writeInt(priority);
+        dest.writeString(contactUri);
+        dest.writeString(contactName);
     }
 
     @SuppressWarnings("unused")
