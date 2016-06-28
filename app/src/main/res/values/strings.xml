@@ -29,4 +29,6 @@
         <item>Medium Priority</item>
         <item>Low Priority</item>
     </string-array>
+    <string name="edittodo">edittodo</string>
+    <string name="Reminder">Reminder</string>
 </resources>

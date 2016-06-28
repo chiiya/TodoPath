@@ -4,6 +4,10 @@ import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
 /**
  * Created by Allaire on 21.05.2016.
  */
@@ -20,6 +24,8 @@ public class Todo implements Parcelable{
     public static final String KEY_PRIORITY = "priority";
     public static final String KEY_CONTACT_URI = "contact_uri";
     public static final String KEY_CONTACT_NAME = "contact_name";
+    public static final String KEY_REMINDER = "reminder";
+
 
     public static final int PRIORITY_HIGH = 0;
     public static final int PRIORITY_MEDIUM = 1;
@@ -33,6 +39,7 @@ public class Todo implements Parcelable{
     private int priority;
     private String contactUri;
     private String contactName;
+    private String reminder;
 
     public Todo() {
     }
@@ -60,6 +67,7 @@ public class Todo implements Parcelable{
         this.priority = priority;
         this.contactUri = contactUri;
         this.contactName = contactName;
+        this.reminder = reminder;
     }
 
 
@@ -123,6 +131,14 @@ public class Todo implements Parcelable{
 
     public void setContactName(String contactName) { this.contactName = contactName; }
 
+    public String reminder() {
+        return this.reminder;
+    }
+
+    public void setReminder(String reminder) {
+        this.reminder = reminder;
+    }
+
     protected Todo(Parcel in) {
         id = in.readLong();
         name = in.readString();
@@ -132,6 +148,7 @@ public class Todo implements Parcelable{
         priority = in.readInt();
         contactUri = in.readString();
         contactName = in.readString();
+        reminder = in.readString();
     }
 
     @Override
@@ -149,6 +166,7 @@ public class Todo implements Parcelable{
         dest.writeInt(priority);
         dest.writeString(contactUri);
         dest.writeString(contactName);
+        dest.writeString(reminder);
     }
 
     @SuppressWarnings("unused")
@@ -163,6 +181,14 @@ public class Todo implements Parcelable{
             return new Todo[size];
         }
     };
+
+
+    public String getReminder() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat(
+                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
+        Date date = new Date();
+        return dateFormat.format(date);
+    }
 }
 
 

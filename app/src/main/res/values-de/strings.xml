@@ -14,4 +14,16 @@
     <string name="save">Speichern</string>
     <string name="edittodo">Todo bearbeiten</string>
     <string name="noLists">Noch keine Todo-Listen erstellt.</string>
+    <string name="addContact">Kontakte hinzufügen</string>
+    <string name="app_name">TodoPath</string>
+    <string name="createTodo">neue Todo erstellen</string>
+    <string name="editTodo">Todo bearbeiten</string>
+    <string name="saveTodo">Todo speichern</string>
+    <string name="title_activity_todo_list">TodoPath</string>
+    <string name="placeholder">Placeholder</string>
+    <string-array name="priority_array">
+        <item>Hohe Priorität</item>
+        <item>Normale Priorität</item>
+        <item>Niedrige Priorität</item>
+    </string-array>
 </resources>

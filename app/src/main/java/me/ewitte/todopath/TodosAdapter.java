@@ -78,6 +78,12 @@ public class TodosAdapter extends BaseAdapter implements StickyListHeadersAdapte
             holder.todoContactName.setVisibility(View.VISIBLE);
         }
 
+        // Show Reminder if a reminder is assigned to the Todo
+        if (todo.getReminder() != null & !todo.getReminder().isEmpty()){
+            holder.todoReminderImage.setVisibility(View.VISIBLE);
+            holder.todoReminder.setText(todo.getContactName());
+            holder.todoReminder.setVisibility(View.VISIBLE);
+        }
         // Return the completed view to render on screen
         return convertView;
     }
@@ -130,11 +136,16 @@ public class TodosAdapter extends BaseAdapter implements StickyListHeadersAdapte
         private TextView todoTextView;
         private ImageButton todoContactImage;
         private TextView todoContactName;
+        private ImageButton todoReminderImage;
+        private TextView todoReminder;
+
 
         public ViewHolder(View v) {
             todoTextView = (TextView) v.findViewById(R.id.task_title);
             todoContactImage = (ImageButton) v.findViewById(R.id.buttonContact);
             todoContactName = (TextView) v.findViewById(R.id.tvListContactName);
+            todoReminderImage = (ImageButton) v.findViewById(R.id.buttonReminder);
+            todoReminder = (TextView) v.findViewById(R.id.tvListReminderInfo);
         }
     }
 

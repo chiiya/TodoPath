@@ -50,6 +50,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                         Todo.KEY_PRIORITY + " INTEGER," +
                         Todo.KEY_CONTACT_URI + " TEXT," +
                         Todo.KEY_CONTACT_NAME + " TEXT," +
+                        Todo.KEY_REMINDER + " CURRENT_TIMESTAMP " +
                         "FOREIGN KEY(" + Todo.KEY_LIST_ID + ") REFERENCES " + List.TABLE + "(" + List.KEY_ID + ") ON DELETE CASCADE" +
                         " );"
         );
@@ -189,6 +190,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
         values.put(Todo.KEY_CONTACT_URI, todo.getContactUri());
         values.put(Todo.KEY_CONTACT_NAME, todo.getContactName());
+        values.put(Todo.KEY_REMINDER,todo.getReminder());
 
         long id = db.insert(Todo.TABLE, null, values);
         db.close();
@@ -215,7 +217,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         Todo todo = new Todo(c.getInt(c.getColumnIndex(Todo.KEY_ID)), c.getString(c.getColumnIndex(Todo.KEY_NAME)),
                 c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                 c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
-                c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)));
+                c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME))
+                //c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+        );
 
         c.close();
         db.close();
@@ -242,7 +246,9 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                 Todo todo = new Todo(c.getInt(c.getColumnIndex(Todo.KEY_ID)), c.getString(c.getColumnIndex(Todo.KEY_NAME)),
                         c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                         c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
-                        c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)));
+                        c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME))
+                       // c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+                );
                 todos.add(todo);
             } while (c.moveToNext());
         }
@@ -267,6 +273,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
         values.put(Todo.KEY_CONTACT_URI, todo.getContactUri());
         values.put(Todo.KEY_CONTACT_NAME, todo.getContactName());
+        values.put(Todo.KEY_REMINDER,todo.getReminder());
 
         int rows = db.update(Todo.TABLE, values, Todo.KEY_ID + " = ?", new String[] { String.valueOf(todo.getId()) });
         db.close();
@@ -297,4 +304,6 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         Date date = new Date();
         return dateFormat.format(date);
     }
+
+
 }
