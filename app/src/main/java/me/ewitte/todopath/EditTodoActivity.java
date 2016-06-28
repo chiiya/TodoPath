@@ -237,6 +237,6 @@ public class EditTodoActivity extends AppCompatActivity {
             }
         }
     }
-    
+
 
 }
