@@ -50,7 +50,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                         Todo.KEY_PRIORITY + " INTEGER," +
                         Todo.KEY_CONTACT_URI + " TEXT," +
                         Todo.KEY_CONTACT_NAME + " TEXT," +
-                        Todo.KEY_REMINDER + " CURRENT_TIMESTAMP " +
+                        Todo.KEY_REMINDER + " CURRENT_TIMESTAMP," +
                         "FOREIGN KEY(" + Todo.KEY_LIST_ID + ") REFERENCES " + List.TABLE + "(" + List.KEY_ID + ") ON DELETE CASCADE" +
                         " );"
         );
@@ -183,15 +183,17 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
+        values.put(Todo.KEY_ID, todo.getId());
         values.put(Todo.KEY_NAME, todo.getName());
         values.put(Todo.KEY_STATUS, 0);
-        values.put(Todo.KEY_LIST_ID, todo.getList_id());
         values.put(Todo.KEY_CREATED_AT, getDateTime());
+        values.put(Todo.KEY_LIST_ID, todo.getList_id());
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
         values.put(Todo.KEY_CONTACT_URI, todo.getContactUri());
         values.put(Todo.KEY_CONTACT_NAME, todo.getContactName());
-        values.put(Todo.KEY_REMINDER,todo.getReminder());
+        values.put(Todo.KEY_REMINDER, todo.getReminder());
 
+        //insert row
         long id = db.insert(Todo.TABLE, null, values);
         db.close();
         return id;
@@ -217,8 +219,8 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         Todo todo = new Todo(c.getInt(c.getColumnIndex(Todo.KEY_ID)), c.getString(c.getColumnIndex(Todo.KEY_NAME)),
                 c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                 c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
-                c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME))
-                //c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+                c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)),
+                c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
         );
 
         c.close();
@@ -246,9 +248,11 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                 Todo todo = new Todo(c.getInt(c.getColumnIndex(Todo.KEY_ID)), c.getString(c.getColumnIndex(Todo.KEY_NAME)),
                         c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                         c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
-                        c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME))
-                       // c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+                        c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)),
+                        c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
                 );
+
+                //adding todo
                 todos.add(todo);
             } while (c.moveToNext());
         }
@@ -292,13 +296,15 @@ public class TaskDBHelper extends SQLiteOpenHelper{
     }
 
 
+    //closing database
+
     public void closeDB() {
         SQLiteDatabase db = this.getReadableDatabase();
         if (db != null && db.isOpen())
             db.close();
     }
 
-    private String getDateTime() {
+    private String getDateTime() { //for created_at
         SimpleDateFormat dateFormat = new SimpleDateFormat(
                 "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
         Date date = new Date();
