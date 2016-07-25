@@ -8,8 +8,11 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
+
+import me.ewitte.todopath.model.Todo;
 
 /**
  * Created by vicakatherine on 6/28/16.
@@ -18,12 +21,12 @@ public class AlarmReceiver extends BroadcastReceiver {
 
         MediaPlayer player;
         @Override
-        public void onReceive(Context arg0, Intent arg1) {
-        Toast.makeText(arg0, "Alarm received!", Toast.LENGTH_LONG).show();
-        player = MediaPlayer.create(arg0, R.raw.alarm1);
-        player.start();
+        public void onReceive(Context arg0, Intent intent) {
+            Bundle extras = intent.getExtras();
+            Todo todo = extras.getParcelable(Todo.TAG);
 
             Intent notificationIntent = new Intent(arg0, TodoActivity.class);
+            notificationIntent.putExtra(TodoActivity.EXTRA_LIST_ID, todo.getList_id());
 
             TaskStackBuilder stackBuilder = TaskStackBuilder.create(arg0);
             stackBuilder.addParentStack(MainActivity.class);
@@ -33,8 +36,8 @@ public class AlarmReceiver extends BroadcastReceiver {
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(arg0);
 
-            Notification notification = builder.setContentTitle("TodoPath")
-                    .setContentText("Look your TODO!")
+            Notification notification = builder.setContentTitle("TodoPath - Pending Todo")
+                    .setContentText(todo.getName())
                  //   .setTicker("New Message Alert!")
                     .setSmallIcon(R.drawable.icontodo)
                     .setContentIntent(pendingIntent).build();

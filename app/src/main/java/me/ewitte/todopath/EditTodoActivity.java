@@ -1,56 +1,49 @@
 package me.ewitte.todopath;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.AlarmManager;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.PendingIntent;
-import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.Image;
 import android.net.Uri;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.TimePicker;
 import android.widget.Toast;
 import android.provider.ContactsContract.Contacts;
 import android.view.View.OnClickListener;
-import android.widget.DatePicker.OnDateChangedListener;
+import android.util.Log;
 
-import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
+import com.wdullaer.materialdatetimepicker.Utils;
+import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
+import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
 import me.ewitte.todopath.model.CustomDateTimePicker;
 import me.ewitte.todopath.model.Todo;
 
-public class EditTodoActivity extends AppCompatActivity {
+public class EditTodoActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
 
     public static final String EXTRA_TODO_ID = "me.ewitte.todopath.TODOID";
     public static final int REQUEST_PICK_CONTACT = 1;
     public static final int PERMISSION_READ_CONTACTS = 10;
     final static int RQS_1 = 1;
+    private static final String LOG = "EditTodoActivity";
 
     private int todoID;
     private Spinner spinner;
@@ -58,12 +51,8 @@ public class EditTodoActivity extends AppCompatActivity {
     private Todo todo;
     private TextView contactName;
     private ImageButton contactImage;
-    //private TextView reminder;
-    private ImageButton reminderImage;
-    CustomDateTimePicker custom;
-    // Button buttonReminder;
-   // private int mYear, mMonth, mDay, mHour, mMinute;
-   // static final DIALOG_ID = 0;
+    private TextView dateString;
+    private ImageButton dateImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,8 +65,8 @@ public class EditTodoActivity extends AppCompatActivity {
         TextView todoTextView = (TextView) findViewById(R.id.tv_todo);
         contactName = (TextView) findViewById(R.id.contactName);
         contactImage = (ImageButton) findViewById(R.id.buttonAddContact);
-       // reminder = (TextView) findViewById(R.id.textReminder);
-        reminderImage = (ImageButton) findViewById(R.id.buttonReminder);
+        dateString = (TextView) findViewById(R.id.textReminder);
+        dateImage = (ImageButton) findViewById(R.id.buttonReminder);
 
 
         // Initialize and populate Spinner
@@ -97,74 +86,41 @@ public class EditTodoActivity extends AppCompatActivity {
             todoID = extras.getInt(EXTRA_TODO_ID);
             todoEditText.setText(todo.getName());
             spinner.setSelection(todo.getPriority());
-            contactName.setText(todo.getContactName());
-            contactImage.setImageResource(R.drawable.account);
-            reminderImage.setImageResource(R.drawable.reminder);
-
+            if (todo.getContactName() != null) {
+                contactName.setText(todo.getContactName());
+                contactImage.setImageResource(R.drawable.account);
+            }
+            if (todo.getDate() != null) {
+                dateString.setText(todo.getDate());
+                dateImage.setImageResource(R.drawable.reminder);
+                Log.e(LOG, todo.getDate());
+            }
         } else {
             spinner.setSelection(1);
             todoTextView.setText(R.string.createTodo);
             todo = new Todo();
         }
-        custom = new CustomDateTimePicker(this,
-                new CustomDateTimePicker.ICustomDateTimeListener() {
-
-                    @Override
-                    public void onSet(Dialog dialog, Calendar calendarSelected,
-                                      Date dateSelected, int year, String monthFullName,
-                                      String monthShortName, int monthNumber, int date,
-                                      String weekDayFullName, String weekDayShortName,
-                                      int hour24, int hour12, int min, int sec,
-                                      String AM_PM) {
-                        Calendar calNow = Calendar.getInstance();
-                        ((TextView) findViewById(R.id.tvListReminderInfo))
-                                .setText(calendarSelected
-                                        .get(Calendar.DAY_OF_MONTH)
-                                        + "/" + (monthNumber+1) + "/" + year
-                                        + ", " + hour12 + ":" + min
-                                        + " " + AM_PM);
-
-                        if(calendarSelected.compareTo(calNow) <= 0){
-                            Toast.makeText(getApplicationContext(),
-                                    "Invalid Date/Time",
-                                    Toast.LENGTH_LONG).show();
-                        }else{
-                            setAlarm(calendarSelected);
-                        }
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
-        /**
-         * Pass Directly current time format it will return AM and PM if you set
-         * false
-         */
-        custom.set24HourFormat(false);
-        /**
-         * Pass Directly current data and time to show when it pop up
-         */
-        custom.setDate(Calendar.getInstance());
-
-        findViewById(R.id.buttonReminder).setOnClickListener(
-                new OnClickListener() {
-
-                    @Override
-                    public void onClick(View v) {
-                        custom.showDialog();
-                    }
-                });
     }
 
 
-    private void setAlarm(Calendar targetCal){
-
-        Intent intent = new Intent(getBaseContext(), AlarmReceiver.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(getBaseContext(), RQS_1, intent, 0);
+    private void setAlarm(String date){
+        date += " 08:00:00";
+        long timeInMilliseconds = 0;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+        Log.e(LOG, date + " - " + timeInMilliseconds);
+        try {
+            Date mDate = sdf.parse(date);
+            timeInMilliseconds = mDate.getTime();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        Intent intent = new Intent(EditTodoActivity.this, AlarmReceiver.class);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(Todo.TAG, todo);
+        intent.putExtras(bundle);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(EditTodoActivity.this, RQS_1, intent, 0);
         AlarmManager alarmManager = (AlarmManager)getSystemService(Context.ALARM_SERVICE);
-        alarmManager.set(AlarmManager.RTC_WAKEUP, targetCal.getTimeInMillis(), pendingIntent);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, timeInMilliseconds, pendingIntent);
     }
 
 
@@ -196,6 +152,25 @@ public class EditTodoActivity extends AppCompatActivity {
             startActivityForResult(pickContactIntent, REQUEST_PICK_CONTACT);
         }
 
+    }
+
+    public void addDate(View view) {
+        Calendar now = Calendar.getInstance();
+        DatePickerDialog dpd = DatePickerDialog.newInstance(
+                EditTodoActivity.this,
+                now.get(Calendar.YEAR),
+                now.get(Calendar.MONTH),
+                now.get(Calendar.DAY_OF_MONTH)
+        );
+        dpd.setThemeDark(true);
+        dpd.show(getFragmentManager(), "Datepickerdialog");
+    }
+
+    public void onDateSet(DatePickerDialog view, int year, int monthOfYear, int dayOfMonth) {
+        String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
+        dateString.setText(date);
+        todo.setDate(date);
+        setAlarm(date);
     }
 
 
@@ -237,6 +212,5 @@ public class EditTodoActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }

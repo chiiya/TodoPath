@@ -24,7 +24,7 @@ public class Todo implements Parcelable{
     public static final String KEY_PRIORITY = "priority";
     public static final String KEY_CONTACT_URI = "contact_uri";
     public static final String KEY_CONTACT_NAME = "contact_name";
-    public static final String KEY_REMINDER = "reminder";
+    public static final String KEY_DATE = "date";
 
 
     public static final int PRIORITY_HIGH = 0;
@@ -39,7 +39,7 @@ public class Todo implements Parcelable{
     private int priority;
     private String contactUri;
     private String contactName;
-    private String reminder;
+    private String date;
 
     public Todo() {
     }
@@ -58,7 +58,7 @@ public class Todo implements Parcelable{
     }
 
     public Todo(long id, String name, String created_at, int status, long list_id, int priority, String contactUri, String
-                contactName) {
+                contactName, String date) {
         this.id = id;
         this.name = name;
         this.created_at = created_at;
@@ -67,7 +67,7 @@ public class Todo implements Parcelable{
         this.priority = priority;
         this.contactUri = contactUri;
         this.contactName = contactName;
-        this.reminder = reminder;
+        this.date = date;
     }
 
 
@@ -131,12 +131,12 @@ public class Todo implements Parcelable{
 
     public void setContactName(String contactName) { this.contactName = contactName; }
 
-    public String reminder() {
-        return this.reminder;
+    public String getDate() {
+        return this.date;
     }
 
-    public void setReminder(String reminder) {
-        this.reminder = reminder;
+    public void setDate(String date) {
+        this.date = date;
     }
 
     protected Todo(Parcel in) {
@@ -148,7 +148,7 @@ public class Todo implements Parcelable{
         priority = in.readInt();
         contactUri = in.readString();
         contactName = in.readString();
-        reminder = in.readString();
+        date = in.readString();
     }
 
     @Override
@@ -166,7 +166,7 @@ public class Todo implements Parcelable{
         dest.writeInt(priority);
         dest.writeString(contactUri);
         dest.writeString(contactName);
-        dest.writeString(reminder);
+        dest.writeString(date);
     }
 
     @SuppressWarnings("unused")
@@ -182,13 +182,6 @@ public class Todo implements Parcelable{
         }
     };
 
-
-    public String getReminder() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat(
-                "yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        Date date = new Date();
-        return dateFormat.format(date);
-    }
 }
 
 

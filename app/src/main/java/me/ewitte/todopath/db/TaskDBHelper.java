@@ -50,7 +50,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                         Todo.KEY_PRIORITY + " INTEGER," +
                         Todo.KEY_CONTACT_URI + " TEXT," +
                         Todo.KEY_CONTACT_NAME + " TEXT," +
-                        Todo.KEY_REMINDER + " CURRENT_TIMESTAMP," +
+                        Todo.KEY_DATE + " TEXT," +
                         "FOREIGN KEY(" + Todo.KEY_LIST_ID + ") REFERENCES " + List.TABLE + "(" + List.KEY_ID + ") ON DELETE CASCADE" +
                         " );"
         );
@@ -183,7 +183,6 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
-        values.put(Todo.KEY_ID, todo.getId());
         values.put(Todo.KEY_NAME, todo.getName());
         values.put(Todo.KEY_STATUS, 0);
         values.put(Todo.KEY_CREATED_AT, getDateTime());
@@ -191,7 +190,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
         values.put(Todo.KEY_CONTACT_URI, todo.getContactUri());
         values.put(Todo.KEY_CONTACT_NAME, todo.getContactName());
-        values.put(Todo.KEY_REMINDER, todo.getReminder());
+        values.put(Todo.KEY_DATE, todo.getDate());
 
         //insert row
         long id = db.insert(Todo.TABLE, null, values);
@@ -220,7 +219,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                 c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                 c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
                 c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)),
-                c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+                c.getString(c.getColumnIndex(Todo.KEY_DATE))
         );
 
         c.close();
@@ -249,7 +248,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
                         c.getString(c.getColumnIndex(Todo.KEY_CREATED_AT)), c.getInt(c.getColumnIndex(Todo.KEY_STATUS)),
                         c.getInt(c.getColumnIndex(Todo.KEY_LIST_ID)), c.getInt(c.getColumnIndex(Todo.KEY_PRIORITY)),
                         c.getString(c.getColumnIndex(Todo.KEY_CONTACT_URI)), c.getString(c.getColumnIndex(Todo.KEY_CONTACT_NAME)),
-                        c.getString(c.getColumnIndex(Todo.KEY_REMINDER))
+                        c.getString(c.getColumnIndex(Todo.KEY_DATE))
                 );
 
                 //adding todo
@@ -277,7 +276,7 @@ public class TaskDBHelper extends SQLiteOpenHelper{
         values.put(Todo.KEY_PRIORITY, todo.getPriority());
         values.put(Todo.KEY_CONTACT_URI, todo.getContactUri());
         values.put(Todo.KEY_CONTACT_NAME, todo.getContactName());
-        values.put(Todo.KEY_REMINDER,todo.getReminder());
+        values.put(Todo.KEY_DATE,todo.getDate());
 
         int rows = db.update(Todo.TABLE, values, Todo.KEY_ID + " = ?", new String[] { String.valueOf(todo.getId()) });
         db.close();

@@ -56,12 +56,12 @@ public class TodoActivity extends AppCompatActivity {
 
         // Get the extra data from intent call
         Intent intent = getIntent();
-        String listTitle = intent.getStringExtra(EXTRA_LIST_TITLE);
         listID = intent.getLongExtra(EXTRA_LIST_ID, 0);
+        List list = db.getList(listID);
 
         // Set title of TextView to the list currently active
         TextView tdv_title = (TextView) findViewById(R.id.tdv_list_title);
-        tdv_title.setText(listTitle);
+        tdv_title.setText(list.getTitle());
 
         todos = db.getAllTodosFromList(listID);
 

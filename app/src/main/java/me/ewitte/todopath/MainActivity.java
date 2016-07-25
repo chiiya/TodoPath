@@ -62,7 +62,6 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View arg1,int position, long arg3)
             {
                 Intent intent = new Intent(MainActivity.this, TodoActivity.class);
-                intent.putExtra(TodoActivity.EXTRA_LIST_TITLE, listsAdapter.getItem(position).getTitle());
                 intent.putExtra(TodoActivity.EXTRA_LIST_ID, listsAdapter.getItem(position).getId());
                 startActivity(intent);
             }

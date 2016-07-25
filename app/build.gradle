@@ -26,4 +26,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
+    compile 'com.wdullaer:materialdatetimepicker:2.4.0'
 }
