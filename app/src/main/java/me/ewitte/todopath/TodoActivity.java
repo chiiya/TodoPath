@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -32,7 +33,7 @@ import me.ewitte.todopath.model.Todo;
 import se.emilsjolander.stickylistheaders.StickyListHeadersListView;
 
 public class TodoActivity extends AppCompatActivity {
-
+    private static final String LOG = "TodoActivity";
     public static final String EXTRA_LIST_TITLE = "me.ewitte.todopath.LISTTITLE";
     public static final String EXTRA_LIST_ID = "me.ewitte.todopath.LISTID";
     static final int EDIT_TODO = 0;
@@ -51,6 +52,7 @@ public class TodoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_todo_list);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         db = new TaskDBHelper(this);
 
@@ -104,7 +106,7 @@ public class TodoActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            startActivity(new Intent(TodoActivity.this, SettingsActivity.class));
         }
 
         return super.onOptionsItemSelected(item);
@@ -187,6 +189,10 @@ public class TodoActivity extends AppCompatActivity {
                         todo.setList_id(listID);
                         todo.setId(db.createTodo(todo));
                         todos.add(todo);
+                        Log.d(LOG, "New Todo: " + todo.getName());
+                        if (todo.getContactName() != null) {
+                            Log.d(LOG, "Contact: " + todo.getContactName());
+                        }
                         updateUI();
                     }
                     break;

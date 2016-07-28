@@ -27,4 +27,8 @@
         <item>Normale Priorität</item>
         <item>Niedrige Priorität</item>
     </string-array>
+    <string name="pref_title_notification_priority">Notifications einschränken</string>
+    <string name="pref_title_notifications">Notifications für Todos</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="pref_summary_notification_priority">Nur Notifications für Todos mit hoher Priorität erhalten.</string>
 </resources>

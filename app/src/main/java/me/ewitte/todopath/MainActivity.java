@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.media.Image;
+import android.media.audiofx.BassBoost;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -33,7 +34,6 @@ import me.ewitte.todopath.model.List;
 public class MainActivity extends AppCompatActivity {
 
     private ListView todoLists;
-    private ImageButton newList;
     private ArrayList<List> lists;
     private ListsAdapter listsAdapter;
     private TaskDBHelper db;
@@ -68,8 +68,6 @@ public class MainActivity extends AppCompatActivity {
         });
         todoLists.setVerticalScrollBarEnabled(false);
 
-        newList =(ImageButton)findViewById(R.id.list_new);
-
         updateUI();
     }
 
@@ -88,7 +86,8 @@ public class MainActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            return true;
+            Intent intent = new Intent(MainActivity.this, SettingsActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

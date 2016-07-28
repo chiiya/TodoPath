@@ -7,8 +7,10 @@ import android.app.TaskStackBuilder;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.widget.Toast;
 
@@ -42,8 +44,14 @@ public class AlarmReceiver extends BroadcastReceiver {
                     .setSmallIcon(R.drawable.icontodo)
                     .setContentIntent(pendingIntent).build();
 
-            NotificationManager notificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.notify(0, notification);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(arg0);
+            Boolean notPref = sharedPref.getBoolean("pref_notifications", true);
+            Boolean hpNot = sharedPref.getBoolean("pref_notification_priority", false);
+
+            if (notPref && (!hpNot || (hpNot && todo.getPriority()==Todo.PRIORITY_HIGH))) {
+                NotificationManager notificationManager = (NotificationManager) arg0.getSystemService(Context.NOTIFICATION_SERVICE);
+                notificationManager.notify(0, notification);
+            }
         }
 
 

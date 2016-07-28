@@ -14,4 +14,16 @@
 
     <include layout="@layout/content_main" />
 
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        app:backgroundTint="@color/cyan"
+        android:tint="@color/colorPrimary"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@android:drawable/ic_input_add"
+        android:onClick="clickButtonNewList"
+        android:baselineAlignBottom="false" />
+
 </android.support.design.widget.CoordinatorLayout>

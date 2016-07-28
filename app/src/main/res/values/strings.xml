@@ -30,4 +30,11 @@
         <item>Low Priority</item>
     </string-array>
     <string name="Date">Add Deadline</string>
+    <string name="title_activity_settings">Settings</string>
+
+    <!-- Strings related to Settings -->
+    <string name="pref_title_notifications">Notifications for Todos</string>
+    <string name="pref_title_notification_priority">Limit Notifications</string>
+    <string name="pref_summary_notification_priority">Only receive notifications for Todos with high priority.</string>
+
 </resources>

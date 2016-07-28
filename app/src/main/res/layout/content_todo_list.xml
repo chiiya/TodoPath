@@ -32,7 +32,8 @@
         android:id="@+id/tdv_list"
         android:paddingTop="10dp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:fastScrollEnabled="false" />
 
 
 </LinearLayout>

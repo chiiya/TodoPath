@@ -73,15 +73,15 @@ public class TodosAdapter extends BaseAdapter implements StickyListHeadersAdapte
 
         // Show Contact ImageButton if a contact is assigned to the Todo
         if (todo.getContactUri() != null && !todo.getContactUri().isEmpty()) {
-            Log.e(LOG, todo.getName() + " : " + todo.getContactName());
+            Log.d(LOG, todo.getName() + " : " + todo.getContactName());
             holder.todoContactImage.setVisibility(View.VISIBLE);
             holder.todoContactName.setText(todo.getContactName());
             holder.todoContactName.setVisibility(View.VISIBLE);
         }
 
-        // Show Reminder if a reminder is assigned to the Todo
+        // Show Date if a date is assigned to the Todo
         if (todo.getDate() != null && !todo.getDate().isEmpty()){
-            Log.e(LOG, todo.getName() + " : " + todo.getDate());
+            Log.d(LOG, todo.getName() + " : " + todo.getDate());
             holder.todoReminderImage.setVisibility(View.VISIBLE);
             holder.todoReminder.setText(todo.getDate());
             holder.todoReminder.setVisibility(View.VISIBLE);
