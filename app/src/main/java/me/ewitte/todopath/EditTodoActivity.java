@@ -6,9 +6,11 @@ import android.app.Dialog;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -34,7 +36,6 @@ import com.wdullaer.materialdatetimepicker.Utils;
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog;
 import com.wdullaer.materialdatetimepicker.time.RadialPickerLayout;
 
-import me.ewitte.todopath.model.CustomDateTimePicker;
 import me.ewitte.todopath.model.Todo;
 
 public class EditTodoActivity extends AppCompatActivity implements DatePickerDialog.OnDateSetListener {
@@ -170,7 +171,13 @@ public class EditTodoActivity extends AppCompatActivity implements DatePickerDia
         String date = dayOfMonth+"/"+(++monthOfYear)+"/"+year;
         dateString.setText(date);
         todo.setDate(date);
-        setAlarm(date);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean notPref = sharedPref.getBoolean("pref_notifications", true);
+        Boolean hpNot = sharedPref.getBoolean("pref_notification_priority", false);
+
+        if (notPref && (!hpNot || (hpNot && todo.getPriority()==Todo.PRIORITY_HIGH))) {
+            setAlarm(date);
+        }
     }
 
 

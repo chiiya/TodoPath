@@ -12,7 +12,6 @@
     <string name="cancel">Abbrechen</string>
     <string name="edit">Liste bearbeiten</string>
     <string name="save">Speichern</string>
-    <string name="edittodo">Todo bearbeiten</string>
     <string name="noLists">Noch keine Todo-Listen erstellt.</string>
     <string name="addContact">Kontakt hinzufügen</string>
     <string name="app_name">TodoPath</string>
